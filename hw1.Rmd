@@ -1,0 +1,269 @@
+---
+title: "Homework 1"
+author: "Shun-Lung Chang, Dilip Hiremath"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = "", fig.align = 'center', fig.height = 4, fig.width = 4)
+```
+
+```{r, include=FALSE}
+library(knitr)
+```
+
+## 1. Before you address your real task you just want to get a bit acquainted with the data. Read the data into R and use the function summary to get a first overview on the data.
+
+```{r}
+load("data/Forbes2016.Rdata")
+summary(Forbes2016)
+```
+
+### (a) How many companies in the data set are located in China?
+
+There are `r nrow(Forbes2016[Forbes2016$Country == "China", ])` companies located in China, as one can see from the summary table. 
+
+### (b) How many companies in the data set have missing values (i.e. are listed as NA)? For which variables are data missing?
+
+If we look at *Assets* and *Market.Value* variables, there is 1 missing value in both variables. The row containing missing values is shown below.
+
+```{r}
+kable(Forbes2016[is.na(Forbes2016$Assets), ])
+```
+
+```{r}
+kable(Forbes2016[is.na(Forbes2016$Market.Value), ])
+```
+
+In addition, there exist four rows containing missing values in *Sales* variable. These rows are shown below.
+
+```{r}
+kable(Forbes2016[is.na(Forbes2016$Sales), ])
+```
+
+### (c) Which four countries have the top most companies in the Forbes’ list?
+
+The first top countries are United States, Japan, China, and United Kingdom.
+
+### (d) Which share of companies in the data set have a market value smaller than or equal to 6.30 billion USD?
+
+The share is `r format(sum(Forbes2016$Market.Value <= 6.3, na.rm = TRUE) / nrow(Forbes2016) * 100, digits = 4)`%, and the value can be counted in the following code.
+
+```{r}
+sum(Forbes2016$Market.Value <= 6.3, na.rm = TRUE) / nrow(Forbes2016)
+```
+
+### (e) Which share of companies in the data set have assets that are larger than or equal to 10.40 billion USD?
+
+The share is `r format(sum(Forbes2016$Assets >= 10.4, na.rm = TRUE) / nrow(Forbes2016) * 100, digits = 4)`%, and the value can be counted in the following code.
+
+```{r}
+sum(Forbes2016$Assets >= 10.4, na.rm = TRUE) / nrow(Forbes2016)
+```
+
+## 2. Let us have a closer look at the variable types involved here. Looking at the content of each variable:
+
+### (a) Which of the variables in the data set are discrete? 
+
+The discrete variables are *Rank*, *Company*, and *Country*.
+
+### (b) Which of the variables are continuous?
+
+The discrete variables are *Sales*, *Profits*, *Assets*, and *Market.Value*.
+
+### (c) Which discrete ones can be ordered?
+
+The *Rank* variable can be orderd.
+
+## 3. Which types are used in R to store the variables in the data frame? 
+
+The following code returns the class of each variable.
+
+```{r}
+sapply(Forbes2016, class)
+```
+
+## 4. Look at the summary statistics to see how the variable class affects the output. Which variable classes produce the same summary output? Which produce a different one?
+
+
+
+## 5. Draw a histogram for the variable Profit using the default number of bins and color the bins in 'springgreen'. Add a meaningful title to the plot.
+
+```{r}
+hist(Forbes2016$Profits, col = "springgreen",
+     main = "The Count of Profits", xlab = "Profits")
+```
+
+### (a) Is the distribution of market values in the data set symmetric?
+
+```{r}
+hist(Forbes2016$Market.Value, col = "springgreen", 
+     main = "The Count of Market Values", xlab = "Market Values")
+```
+
+### (b) Does the selected number of bins yield a good graphical representation of the data? Try out 7, 50 and 100 bins! Is any of these three options more suited?
+
+```{r}
+hist(Forbes2016$Profits, col = "springgreen", breaks = 7, 
+     main = "The Count of Profits (bins = 7)", xlab = "Profits")
+```
+
+```{r}
+hist(Forbes2016$Profits, col = "springgreen", breaks = 50, 
+     main = "The Count of Profits (bins = 50)", xlab = "Profits")
+```
+
+```{r}
+hist(Forbes2016$Profits, col = "springgreen", breaks = 100, 
+     main = "The Count of Profits (bins = 100)", xlab = "Profits")
+```
+
+## 6. Draw a boxplot for the variable Profit.
+
+```{r}
+boxplot(Forbes2016$Profits, horizontal = TRUE, main = "Boxplot of Profits")
+```
+
+### (a) Compare the boxplot with the histograms above.
+
+### (b) Which graphical representation of the data do you find more helpful?
+
+### (c) How many companies do have profits above 40 billion USD? Can you find out which companies these are?
+
+```{r}
+Forbes2016[Forbes2016$Profits >= 40, ]$Company
+```
+
+## 7. You have a closer look at profits of the companies.
+
+### (a) First, you want to know which profit is needed such that a company belongs to the top two percent. 
+
+```{r}
+quantile(Forbes2016$Profits, probs = 0.98)
+```
+
+### (b) Which percentage of companies has negative profits?
+
+```{r}
+sum(Forbes2016$Profits < 0) / nrow(Forbes2016)
+```
+
+### (c) How large is the interquartile range in sales for the companies on Forbes’ list?
+
+```{r}
+IQR(Forbes2016$Sales, na.rm = TRUE)
+```
+
+## 8. Now you start turning towards your real task. Create a subset of the data set comprising all companies that have their legal residence in one of the following countries: Brazil, India, South Korea, France, Germany or Mexico. Draw a boxplot for the variable Profits splitted by country for these companies.
+
+```{r}
+sub_forbes2016 <- subset(Forbes2016,
+                         Country %in% c("Brazil", "India", "South Korea", "Franc", "Germany", "Mexico"))
+
+boxplot(Profits ~ as.character(Country), data = sub_forbes2016, horizontal = TRUE)
+```
+
+### (a) How much difference in medians between countries is shown in the plot?
+
+### (b) Which country shows the largest median profit?
+
+The plot indicates that the largest median profit lies in Brazil. 
+
+### (c) Which country/countries show the most symmetric distributions for profit?
+
+South Korea shows the most symmetric distributions for profit in the plot.
+
+### (d) Create a frequency table for the variable Country sorted in decreasing order. Which three countries – among those selected – have the top most companies in Forbes’ list?
+
+```{r}
+sort(table(as.character(sub_forbes2016$Country)), decreasing = TRUE)
+```
+
+## 9. Now you start with your real task for the subset data created in Question 8.
+
+### (a) What is the median profit of the selected companies?
+
+```{r}
+median(sub_forbes2016$Profits, na.rm = TRUE)
+```
+
+### (b) What is the average profit of the selected companies?
+
+```{r}
+mean(sub_forbes2016$Profits, na.rm = TRUE)
+```
+
+### (c) What is the average distance for a company’s profit to the average profit (i.e. what is the standard deviation of profits)?
+
+```{r}
+sd(sub_forbes2016$Profits, na.rm = TRUE)
+```
+
+### (d) Does the top third of selected companies have profits that are at least as high as the median profit for all companies on the Forbes list?
+
+```{r}
+aggregate(sub_forbes2016$Profits, list(sub_forbes2016$Country), median)
+```
+
+## 10. In order to fulfil your task you finally draw a random sample of size 80 from the list of your selected companies. Create the resulting data frame!
+
+```{r}
+set.seed(42)
+sampled_forbes2016 <- sub_forbes2016[sample(1:nrow(sub_forbes2016), 80), ]
+```
+
+### (a) Compute the mean profit for your sample? 
+
+```{r}
+mean(sampled_forbes2016$Profits, na.rm = TRUE)
+```
+
+### (b) Compute the median profit for your sample?
+
+```{r}
+median(sampled_forbes2016$Profits, na.rm = TRUE)
+```
+
+### (c) Compute the minimum profit for your sample? 
+
+```{r}
+min(sampled_forbes2016$Profits, na.rm = TRUE)
+```
+
+### (d) Compute the maximum profit for your sample?
+
+```{r}
+max(sampled_forbes2016$Profits, na.rm = TRUE)
+```
+
+### (e) Compute the 90%-quantile for your sample?
+
+```{r}
+quantile(sampled_forbes2016$Profits, probs = 0.9)
+```
+
+## 11. Are median and mean profits of your sample below or above the median and mean market value for all companies in the selected countries?
+
+
+## 12. Compute the standard deviation of profits for your sample. Is it smaller or larger than the standard deviation in profits for all selected companies?
+
+```{r}
+sd(sampled_forbes2016$Profits, na.rm = TRUE)
+```
+
+## 13. Draw a boxplot, a histogram, and a density plot of the profit for your sample. Can you draw any substantial information from your plot? (e.g about skewness of the distribution, outliers, quartiles)
+
+```{r}
+boxplot(sampled_forbes2016$Profits, horizontal = TRUE, 
+        main = "Boxplot of Profits for Sampled Data")
+```
+
+```{r}
+hist(sampled_forbes2016$Profits, 
+     main = "Histogram of Profits for Sampled Data", xlab = "Profits")
+```
+
+```{r}
+d <- density(sampled_forbes2016$Profits)
+plot(d, main = "Density of Profits for Sampled Data", xlab = "Profits")
+```
