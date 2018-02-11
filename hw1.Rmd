@@ -85,37 +85,41 @@ sapply(Forbes2016, class)
 
 ## 4. Look at the summary statistics to see how the variable class affects the output. Which variable classes produce the same summary output? Which produce a different one?
 
-
+The variables belonging to class **integer** or **numeric** produce the measures of center and dispersion. On the other hand, variables in class **factor** produce the counts of each class.
 
 ## 5. Draw a histogram for the variable Profit using the default number of bins and color the bins in 'springgreen'. Add a meaningful title to the plot.
 
 ```{r}
 hist(Forbes2016$Profits, col = "springgreen",
-     main = "The Count of Profits", xlab = "Profits")
+     main = "Counts of Profits", xlab = "Profits")
 ```
 
 ### (a) Is the distribution of market values in the data set symmetric?
 
+As can been from the plots, both the distributions of *Profits* and *Market.Value* are not symmetric.
+
 ```{r}
 hist(Forbes2016$Market.Value, col = "springgreen", 
-     main = "The Count of Market Values", xlab = "Market Values")
+     main = "Counts of Market Values", xlab = "Market Values")
 ```
 
 ### (b) Does the selected number of bins yield a good graphical representation of the data? Try out 7, 50 and 100 bins! Is any of these three options more suited?
 
+In fact, there is no optimal number for bins. But in this case, we would say that 50 is better since the bins are not too small or too large.
+
 ```{r}
 hist(Forbes2016$Profits, col = "springgreen", breaks = 7, 
-     main = "The Count of Profits (bins = 7)", xlab = "Profits")
+     main = "Counts of Profits (bins = 7)", xlab = "Profits")
 ```
 
 ```{r}
 hist(Forbes2016$Profits, col = "springgreen", breaks = 50, 
-     main = "The Count of Profits (bins = 50)", xlab = "Profits")
+     main = "Counts of Profits (bins = 50)", xlab = "Profits")
 ```
 
 ```{r}
 hist(Forbes2016$Profits, col = "springgreen", breaks = 100, 
-     main = "The Count of Profits (bins = 100)", xlab = "Profits")
+     main = "Counts of Profits (bins = 100)", xlab = "Profits")
 ```
 
 ## 6. Draw a boxplot for the variable Profit.
@@ -156,11 +160,14 @@ IQR(Forbes2016$Sales, na.rm = TRUE)
 
 ## 8. Now you start turning towards your real task. Create a subset of the data set comprising all companies that have their legal residence in one of the following countries: Brazil, India, South Korea, France, Germany or Mexico. Draw a boxplot for the variable Profits splitted by country for these companies.
 
-```{r}
+```{r, fig.height=5}
 sub_forbes2016 <- subset(Forbes2016,
-                         Country %in% c("Brazil", "India", "South Korea", "Franc", "Germany", "Mexico"))
+                         Country %in% c("Brazil", "India", "South Korea", "Franc", 
+                                        "Germany", "Mexico"))
 
-boxplot(Profits ~ as.character(Country), data = sub_forbes2016, horizontal = TRUE)
+boxplot(Profits ~ as.character(Country), data = sub_forbes2016, horizontal = TRUE, 
+        main = "Boxplot of Profits in different Countries",
+        las = 1)
 ```
 
 ### (a) How much difference in medians between countries is shown in the plot?
@@ -260,7 +267,7 @@ boxplot(sampled_forbes2016$Profits, horizontal = TRUE,
 
 ```{r}
 hist(sampled_forbes2016$Profits, 
-     main = "Histogram of Profits for Sampled Data", xlab = "Profits")
+     main = "Counts of Profits for Sampled Data", xlab = "Profits")
 ```
 
 ```{r}
