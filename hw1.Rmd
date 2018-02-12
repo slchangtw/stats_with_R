@@ -130,9 +130,15 @@ boxplot(Forbes2016$Profits, horizontal = TRUE, main = "Boxplot of Profits")
 
 ### (a) Compare the boxplot with the histograms above.
 
+The histograms represent the distribution of *Profits* by frequencies in each bins. Besides, the boxplot depicts *Profits* through its quantiles.
+
 ### (b) Which graphical representation of the data do you find more helpful?
 
+It depends on what information one attempts to seek. If one is more intereted in the overall distribution of a numerical variable, the histogram is more helpful. Yet a boxplot visually displays the quatiles and can help one to simply detect the outliers of a variable. 
+
 ### (c) How many companies do have profits above 40 billion USD? Can you find out which companies these are?
+
+Two company have rofits over 40 billion USD, and the companies are "ICBC" and "Apple".
 
 ```{r}
 Forbes2016[Forbes2016$Profits >= 40, ]$Company
@@ -142,17 +148,23 @@ Forbes2016[Forbes2016$Profits >= 40, ]$Company
 
 ### (a) First, you want to know which profit is needed such that a company belongs to the top two percent. 
 
+As the results indicates below, a company with profits above 9.87 billion USD can be in the top two percent.
+
 ```{r}
 quantile(Forbes2016$Profits, probs = 0.98)
 ```
 
 ### (b) Which percentage of companies has negative profits?
 
+`r format(sum(Forbes2016$Profits < 0) / nrow(Forbes2016) * 100, digits = 3)`% companies has negative profits.
+
 ```{r}
 sum(Forbes2016$Profits < 0) / nrow(Forbes2016)
 ```
 
 ### (c) How large is the interquartile range in sales for the companies on Forbes’ list?
+
+The interquartile is `r IQR(Forbes2016$Sales, na.rm = TRUE)` billion USD.
 
 ```{r}
 IQR(Forbes2016$Sales, na.rm = TRUE)
@@ -182,6 +194,8 @@ South Korea shows the most symmetric distributions for profit in the plot.
 
 ### (d) Create a frequency table for the variable Country sorted in decreasing order. Which three countries – among those selected – have the top most companies in Forbes’ list?
 
+The top three contries are "South Korea", "India" and "Germany", and the following table lists.
+
 ```{r}
 sort(table(as.character(sub_forbes2016$Country)), decreasing = TRUE)
 ```
@@ -190,11 +204,15 @@ sort(table(as.character(sub_forbes2016$Country)), decreasing = TRUE)
 
 ### (a) What is the median profit of the selected companies?
 
+The median profit is `r median(sub_forbes2016$Profits, na.rm = TRUE)` billion USD.
+
 ```{r}
 median(sub_forbes2016$Profits, na.rm = TRUE)
 ```
 
 ### (b) What is the average profit of the selected companies?
+
+The average profit is `r format(mean(sub_forbes2016$Profits, na.rm = TRUE), digits = 3)` billion USD.
 
 ```{r}
 mean(sub_forbes2016$Profits, na.rm = TRUE)
@@ -202,11 +220,15 @@ mean(sub_forbes2016$Profits, na.rm = TRUE)
 
 ### (c) What is the average distance for a company’s profit to the average profit (i.e. what is the standard deviation of profits)?
 
+The standard deviation of profit is `r format(sd(sub_forbes2016$Profits, na.rm = TRUE), digits = 3)` billion USD.
+
 ```{r}
 sd(sub_forbes2016$Profits, na.rm = TRUE)
 ```
 
 ### (d) Does the top third of selected companies have profits that are at least as high as the median profit for all companies on the Forbes list?
+
+The median of profits in Germany (3.45) exceeds the median profit for all companies (2.95), while the medians of profits in South Korea and India do not.
 
 ```{r}
 aggregate(sub_forbes2016$Profits, list(sub_forbes2016$Country), median)
@@ -215,11 +237,13 @@ aggregate(sub_forbes2016$Profits, list(sub_forbes2016$Country), median)
 ## 10. In order to fulfil your task you finally draw a random sample of size 80 from the list of your selected companies. Create the resulting data frame!
 
 ```{r}
-set.seed(42)
+set.seed(42) # fix random seed
 sampled_forbes2016 <- sub_forbes2016[sample(1:nrow(sub_forbes2016), 80), ]
 ```
 
 ### (a) Compute the mean profit for your sample? 
+
+The mean profit for the sample is `r format(mean(sampled_forbes2016$Profits, na.rm = TRUE), digits = 3)` billion USD.
 
 ```{r}
 mean(sampled_forbes2016$Profits, na.rm = TRUE)
@@ -227,11 +251,15 @@ mean(sampled_forbes2016$Profits, na.rm = TRUE)
 
 ### (b) Compute the median profit for your sample?
 
+The median profit for the sample is `r format(median(sampled_forbes2016$Profits, na.rm = TRUE), digits = 3)` billion USD.
+
 ```{r}
 median(sampled_forbes2016$Profits, na.rm = TRUE)
 ```
 
 ### (c) Compute the minimum profit for your sample? 
+
+The minimum profit for the sample is `r format(min(sampled_forbes2016$Profits, na.rm = TRUE), digits = 3)` billion USD.
 
 ```{r}
 min(sampled_forbes2016$Profits, na.rm = TRUE)
@@ -239,11 +267,15 @@ min(sampled_forbes2016$Profits, na.rm = TRUE)
 
 ### (d) Compute the maximum profit for your sample?
 
+The maximum profit for the sample is `r format(max(sampled_forbes2016$Profits, na.rm = TRUE), digits = 3)` billion USD.
+
 ```{r}
 max(sampled_forbes2016$Profits, na.rm = TRUE)
 ```
 
 ### (e) Compute the 90%-quantile for your sample?
+
+The maximum profit for the sample is `r format(quantile(sampled_forbes2016$Profits, probs = 0.9)[[1]], digits = 3)` billion USD.
 
 ```{r}
 quantile(sampled_forbes2016$Profits, probs = 0.9)
