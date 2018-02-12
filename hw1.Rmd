@@ -283,14 +283,23 @@ quantile(sampled_forbes2016$Profits, probs = 0.9)
 
 ## 11. Are median and mean profits of your sample below or above the median and mean market value for all companies in the selected countries?
 
+The median profit of sampled data (`r format(median(sampled_forbes2016$Profits, na.rm = TRUE), digits = 3)`) is smaller than median market value of all companies (`r format(median(sub_forbes2016$Market.Value, na.rm = TRUE), digits = 3)`).
+
+The mean profit of sampled data (`r format(mean(sampled_forbes2016$Profits, na.rm = TRUE), digits = 3)`) is also smaller than mean market value of all companies (`r format(mean(sub_forbes2016$Market.Value, na.rm = TRUE), digits = 3)`).
 
 ## 12. Compute the standard deviation of profits for your sample. Is it smaller or larger than the standard deviation in profits for all selected companies?
+
+The standard deviation of profits of sampled data (`r format(sd(sampled_forbes2016$Profits, na.rm = TRUE), digits = 3)`) is larger than that of all companies (`r format(sd(sub_forbes2016$Profits, na.rm = TRUE), digits = 3)`).
 
 ```{r}
 sd(sampled_forbes2016$Profits, na.rm = TRUE)
 ```
 
 ## 13. Draw a boxplot, a histogram, and a density plot of the profit for your sample. Can you draw any substantial information from your plot? (e.g about skewness of the distribution, outliers, quartiles)
+
+As the plots display, there exists no extreme skewness but slight left skewness. That is, the outliers appear more often in the left side of the distribution. The boxplot also shows that 4 companies has profits less than lower limit (Q1 - 1.5IQR). 
+
+The histogram suggests that most companies have profits in 0 to 10 billion USD, and the interquatile range is around 3 billion USD in the boxplot.
 
 ```{r}
 boxplot(sampled_forbes2016$Profits, horizontal = TRUE, 
