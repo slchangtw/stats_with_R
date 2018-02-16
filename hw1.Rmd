@@ -15,7 +15,7 @@ library(knitr)
 ## 1. Before you address your real task you just want to get a bit acquainted with the data. Read the data into R and use the function summary to get a first overview on the data.
 
 ```{r}
-load("data/Forbes2016.Rdata")
+load("data/Forbes2016.Rdata") # read the data into R
 summary(Forbes2016)
 ```
 
@@ -25,7 +25,7 @@ There are `r nrow(Forbes2016[Forbes2016$Country == "China", ])` companies locate
 
 ### (b) How many companies in the data set have missing values (i.e. are listed as NA)? For which variables are data missing?
 
-If we look at *Assets* and *Market.Value* variables, there is 1 missing value in both variables. The row containing missing values is shown below.
+If we look at *Assets* and *Market.Value*, there is 1 missing value in both variables. The row containing missing values is shown below.
 
 ```{r}
 kable(Forbes2016[is.na(Forbes2016$Assets), ])
@@ -35,7 +35,7 @@ kable(Forbes2016[is.na(Forbes2016$Assets), ])
 kable(Forbes2016[is.na(Forbes2016$Market.Value), ])
 ```
 
-In addition, there exist four rows containing missing values in *Sales* variable. These rows are shown below.
+In addition, there exist four rows containing missing values in *Sales*. These rows are shown below.
 
 ```{r}
 kable(Forbes2016[is.na(Forbes2016$Sales), ])
@@ -43,11 +43,11 @@ kable(Forbes2016[is.na(Forbes2016$Sales), ])
 
 ### (c) Which four countries have the top most companies in the Forbes’ list?
 
-The first top countries are United States, Japan, China, and United Kingdom.
+As the summary table indicates, the first top countries are United States, Japan, China, and United Kingdom.
 
 ### (d) Which share of companies in the data set have a market value smaller than or equal to 6.30 billion USD?
 
-The share is `r format(sum(Forbes2016$Market.Value <= 6.3, na.rm = TRUE) / nrow(Forbes2016) * 100, digits = 4)`%, and the value can be counted in the following code.
+The share is `r format(sum(Forbes2016$Market.Value <= 6.3, na.rm = TRUE) / nrow(Forbes2016) * 100, digits = 4)`%, and the value can be obtained with the following code.
 
 ```{r}
 sum(Forbes2016$Market.Value <= 6.3, na.rm = TRUE) / nrow(Forbes2016)
@@ -55,7 +55,7 @@ sum(Forbes2016$Market.Value <= 6.3, na.rm = TRUE) / nrow(Forbes2016)
 
 ### (e) Which share of companies in the data set have assets that are larger than or equal to 10.40 billion USD?
 
-The share is `r format(sum(Forbes2016$Assets >= 10.4, na.rm = TRUE) / nrow(Forbes2016) * 100, digits = 4)`%, and the value can be counted in the following code.
+The share is `r format(sum(Forbes2016$Assets >= 10.4, na.rm = TRUE) / nrow(Forbes2016) * 100, digits = 4)`%, and the value can be obtained with the following code.
 
 ```{r}
 sum(Forbes2016$Assets >= 10.4, na.rm = TRUE) / nrow(Forbes2016)
@@ -73,7 +73,7 @@ The discrete variables are *Sales*, *Profits*, *Assets*, and *Market.Value*.
 
 ### (c) Which discrete ones can be ordered?
 
-The *Rank* variable can be orderd.
+The variable *Rank* can be orderd.
 
 ## 3. Which types are used in R to store the variables in the data frame? 
 
@@ -85,7 +85,7 @@ sapply(Forbes2016, class)
 
 ## 4. Look at the summary statistics to see how the variable class affects the output. Which variable classes produce the same summary output? Which produce a different one?
 
-The variables belonging to class **integer** or **numeric** produce the measures of center and dispersion. On the other hand, variables in class **factor** produce the counts of each class.
+The variables belonging to class **integer** or **numeric** produce the measures of center and dispersion. On the other hand, variables in class **factor** produce the counts for each categories.
 
 ## 5. Draw a histogram for the variable Profit using the default number of bins and color the bins in 'springgreen'. Add a meaningful title to the plot.
 
@@ -94,14 +94,9 @@ hist(Forbes2016$Profits, col = "springgreen",
      main = "Counts of Profits", xlab = "Profits")
 ```
 
-### (a) Is the distribution of market values in the data set symmetric?
+### (a) Is the distribution of Profit in the data set symmetric?
 
-As can been from the plots, both the distributions of *Profits* and *Market.Value* are not symmetric.
-
-```{r}
-hist(Forbes2016$Market.Value, col = "springgreen", 
-     main = "Counts of Market Values", xlab = "Market Values")
-```
+As can been from the plot, the distributions of *Profits* is not quitely symmetric. There exist more companies with positive profits.
 
 ### (b) Does the selected number of bins yield a good graphical representation of the data? Try out 7, 50 and 100 bins! Is any of these three options more suited?
 
@@ -141,14 +136,14 @@ It depends on what information one attempts to seek. If one is more intereted in
 Two company have rofits over 40 billion USD, and the companies are "ICBC" and "Apple".
 
 ```{r}
-Forbes2016[Forbes2016$Profits >= 40, ]$Company
+Forbes2016[Forbes2016$Profits >= 40, "Company"]
 ```
 
 ## 7. You have a closer look at profits of the companies.
 
 ### (a) First, you want to know which profit is needed such that a company belongs to the top two percent. 
 
-As the results indicates below, a company with profits above 9.87 billion USD can be in the top two percent.
+As the results indicate below, a company with profits above 9.87 billion USD can be in the top two percent.
 
 ```{r}
 quantile(Forbes2016$Profits, probs = 0.98)
@@ -178,11 +173,21 @@ sub_forbes2016 <- subset(Forbes2016,
                                         "Germany", "Mexico"))
 
 boxplot(Profits ~ as.character(Country), data = sub_forbes2016, horizontal = TRUE, 
-        main = "Boxplot of Profits in different Countries",
+        main = "Boxplot of Profits in Different Countries",
         las = 1)
 ```
 
 ### (a) How much difference in medians between countries is shown in the plot?
+
+The differences in the medians are all smaller than 1.5 billion USD. As the plot and following table show, the largest difference is 1.390 (between Mexico and Brazil), and the smallest difference is 0.32 (between Germany and Brazil).
+
+```{r}
+grouped_median <- aggregate(sub_forbes2016$Profits, list(sub_forbes2016$Country), median)
+
+grouped_median <- setNames(grouped_median$x, grouped_median$Group.1)
+
+dist(grouped_median) # differeces of medians in different countries ()
+```
 
 ### (b) Which country shows the largest median profit?
 
@@ -194,7 +199,7 @@ South Korea shows the most symmetric distributions for profit in the plot.
 
 ### (d) Create a frequency table for the variable Country sorted in decreasing order. Which three countries – among those selected – have the top most companies in Forbes’ list?
 
-The top three contries are "South Korea", "India" and "Germany", and the following table lists.
+The top three contries are "South Korea", "India" and "Germany", as the following table lists.
 
 ```{r}
 sort(table(as.character(sub_forbes2016$Country)), decreasing = TRUE)
@@ -228,16 +233,16 @@ sd(sub_forbes2016$Profits, na.rm = TRUE)
 
 ### (d) Does the top third of selected companies have profits that are at least as high as the median profit for all companies on the Forbes list?
 
-The median of profits in Germany (3.45) exceeds the median profit for all companies (2.95), while the medians of profits in South Korea and India do not.
+The median of profits in Germany (3.45) exceeds the median profit for all companies (2.95), while the medians of profits in South Korea (2.7) and India (2.805) do not.
 
 ```{r}
-aggregate(sub_forbes2016$Profits, list(sub_forbes2016$Country), median)
+kable(aggregate(sub_forbes2016$Profits, list(sub_forbes2016$Country), median))
 ```
 
 ## 10. In order to fulfil your task you finally draw a random sample of size 80 from the list of your selected companies. Create the resulting data frame!
 
 ```{r}
-set.seed(42) # fix random seed
+set.seed(42) # fix the random seed
 sampled_forbes2016 <- sub_forbes2016[sample(1:nrow(sub_forbes2016), 80), ]
 ```
 
@@ -281,11 +286,11 @@ The maximum profit for the sample is `r format(quantile(sampled_forbes2016$Profi
 quantile(sampled_forbes2016$Profits, probs = 0.9)
 ```
 
-## 11. Are median and mean profits of your sample below or above the median and mean market value for all companies in the selected countries?
+## 11. Are median and mean profits of your sample below or above the median and mean profits for all companies in the selected countries?
 
-The median profit of sampled data (`r format(median(sampled_forbes2016$Profits, na.rm = TRUE), digits = 3)`) is smaller than median market value of all companies (`r format(median(sub_forbes2016$Market.Value, na.rm = TRUE), digits = 3)`).
+The median profit of sampled data (`r format(median(sampled_forbes2016$Profits, na.rm = TRUE), digits = 3)`) is smaller than that of all companies (`r format(median(sub_forbes2016$Profits, na.rm = TRUE), digits = 3)`).
 
-The mean profit of sampled data (`r format(mean(sampled_forbes2016$Profits, na.rm = TRUE), digits = 3)`) is also smaller than mean market value of all companies (`r format(mean(sub_forbes2016$Market.Value, na.rm = TRUE), digits = 3)`).
+The mean profit of sampled data (`r format(mean(sampled_forbes2016$Profits, na.rm = TRUE), digits = 3)`) is also smaller than mean profit of all companies (`r format(mean(sub_forbes2016$Profits, na.rm = TRUE), digits = 3)`).
 
 ## 12. Compute the standard deviation of profits for your sample. Is it smaller or larger than the standard deviation in profits for all selected companies?
 
@@ -297,7 +302,7 @@ sd(sampled_forbes2016$Profits, na.rm = TRUE)
 
 ## 13. Draw a boxplot, a histogram, and a density plot of the profit for your sample. Can you draw any substantial information from your plot? (e.g about skewness of the distribution, outliers, quartiles)
 
-As the plots display, there exists no extreme skewness but slight left skewness. That is, the outliers appear more often in the left side of the distribution. The boxplot also shows that 4 companies has profits less than lower limit (Q1 - 1.5IQR). 
+As the plots display, there exists no extreme skewness but slight left skewness. That is, the outliers appear more often in the left side of the distribution. The boxplot also shows that 4 companies has profits less than lower whisker (Q1 - 1.5IQR). 
 
 The histogram suggests that most companies have profits in 0 to 10 billion USD, and the interquatile range is around 3 billion USD in the boxplot.
 
