@@ -1,0 +1,10 @@
+---
+title: "Homework 2"
+author: "Shun-Lung Chang, Dilip Hiremath"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = "", fig.align = 'center', fig.height = 4, fig.width = 4)
+```
+

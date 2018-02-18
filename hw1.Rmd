@@ -280,7 +280,7 @@ max(sampled_forbes2016$Profits, na.rm = TRUE)
 
 ### (e) Compute the 90%-quantile for your sample?
 
-The maximum profit for the sample is `r format(quantile(sampled_forbes2016$Profits, probs = 0.9)[[1]], digits = 3)` billion USD.
+The 90%-quantile for the sample is `r format(quantile(sampled_forbes2016$Profits, probs = 0.9)[[1]], digits = 3)` billion USD.
 
 ```{r}
 quantile(sampled_forbes2016$Profits, probs = 0.9)
@@ -290,7 +290,7 @@ quantile(sampled_forbes2016$Profits, probs = 0.9)
 
 The median profit of sampled data (`r format(median(sampled_forbes2016$Profits, na.rm = TRUE), digits = 3)`) is smaller than that of all companies (`r format(median(sub_forbes2016$Profits, na.rm = TRUE), digits = 3)`).
 
-The mean profit of sampled data (`r format(mean(sampled_forbes2016$Profits, na.rm = TRUE), digits = 3)`) is also smaller than mean profit of all companies (`r format(mean(sub_forbes2016$Profits, na.rm = TRUE), digits = 3)`).
+The mean profit of sampled data (`r format(mean(sampled_forbes2016$Profits, na.rm = TRUE), digits = 3)`) is also smaller than that of all companies (`r format(mean(sub_forbes2016$Profits, na.rm = TRUE), digits = 3)`).
 
 ## 12. Compute the standard deviation of profits for your sample. Is it smaller or larger than the standard deviation in profits for all selected companies?
 
