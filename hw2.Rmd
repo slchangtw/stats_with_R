@@ -258,6 +258,7 @@ Given these two variables are both continuous, Pearson correlation coefficient w
 
 ### (a) (half a point) Eliminate these five outliers and draw the plot anew. Has the relationship changed?
 
+The relationship has indeed changed. We can see a more stronger negative relationship as the outliers have been removed.
 
 ```{r}
 d <- companies[!(companies$dividend > 15 | 
@@ -272,12 +273,17 @@ ggplot(data = d) +
 
 ### (b) (1 point) Give the company names for those that you eliminated from your analysis?
 
+The five commpanies that we eleminated are as below 
+"IDB Holdings", "Brait SA. (JSE)", "Combined Motor", "Peregrine" and "PSG Group".
+
 ```{r}
 companies[(companies$dividend > 15 & 
                !is.na(companies$dividend) | companies$pricechange > 140 ), "name"]
 ```
 
 ### (c) (1 point) Calculate the Pearson correlation coefficient for the restricted set. By how much has the correlation coefficient changed.
+
+The correlation coefficient for the restricted set has changed by 0.2010288, from -0.130151 to -0.3311798.
 
 ```{r}
 cor(d$pricechange, d$dividend, use = "complete.obs")
