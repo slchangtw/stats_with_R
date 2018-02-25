@@ -1,0 +1,67 @@
+---
+title: "Homework 3"
+author: "Shun-Lung Chang, Dilip Hiremath"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = "", fig.align = 'center', fig.height = 3, fig.width = 6, message = FALSE, warning = FALSE)
+```
+
+```{r}
+load("data/creditcard.Rdata")
+```
+
+## 1. First of all, tabulate the CreditCard variable.
+
+### (a) (half a point) How many applicants was the credit card approved?
+
+### (b) (1 point) What are the odds of getting a credit card application denied?
+
+### (c) (1 point) What is the "risk" (i.e. probability) of getting a credit card application approved?
+
+## 2. Cross-tabulate the variables Children and CreditCard.
+
+### (a) (1 point) How many applicants with children in their household was the credit card denied?
+
+### (b) (1 point) How many applicants without children in their household got the credit card application approved?
+
+### (c) (half a point) Draw a mosaicplot visualising the contingency table of credit card approval and whether children live in the applicant’s household.
+
+## 3. You continue with your analysis of the relationship between Children and CreditCard.
+
+### (a) (1 point) Are applicants with children in their household less likely (as measured in odds) to get credit card applications approved than others? Calculate the odds ratio for getting a credit card application approved comparing applicants with children in their household with those without.
+
+### (b) (1 point) Are applicants with children less likely (as measured in risk) to get credit card applications denied than applicants without children? Calculate the relative risk for getting a credit card application denied comparing applicants with children in their household to those without.
+
+### (c) (half a point) Looking at the mosiac plot created in Question 2c, how strong is the relationship between the two variables Children and CreditCard.
+
+## 4. Now, you assess the relationship between Children and CreditCard using the $\chi^2$-statistic.
+
+### (a) (1 point) Calculate the $\chi^2$-statistic to assess the relationship between Children and CreditCard.
+
+### (b) (1.5 points) Calculate the expected frequencies under the assumption that home ownership has no effect on credit card approval. For which cells are expected frequencies higher than the observed ones?
+
+## 5. In the following, perform the analyses separately for female and male applicants.
+
+### (a) (half a point) Calculate the $\chi^2$-statistic to assess the relationship between Children and CreditCard.
+
+### (b) (1.5 point) Calculate the expected frequencies under the assumption that home own- ership has no effect on credit card approval. For which cells are expected frequencies higher than the observed ones?
+
+### (c) (half a point) Do the results differ for the two sexes?
+
+## 6. (2.5 points) Visualise the relationships using mosaicplots. Do the differences between females and males in relation to credit card approval and children in the household become visible in the plots? Provide reason for your answer!
+
+## 7. (2.5points) Compute the odds ratios to assess the relationship between Children and CreditCard for males and females separately. Are the results more in line with the $\chi^2$-statistic or more in line with the mosaicplot?
+
+## 8. Now, you assess the relationships between SavingsType and CreditCard.
+
+### (a) (half a point) Calculate the $\chi^2$-statistic to assess the relationship between SavingsType and CreditCard.
+
+### (b) (1 point) Calculate the Phi-coefficient, the Contingency Coefficient and Cramer’s V to assess the relationship between SavingsType and CreditCard.
+
+### (c) (half a point) Why is there no result for the Phi-Coefficient?
+
+### (d) (half a point) Visualize the relationship between credit card approval and savings type. Which of the statistics used for this data comes closer to the visual representation of the relationship’s strength?
+
+## 9. (2.5 points) Since there are too few cases for savings type 3 (CDs), you exclude applicants having this savings type and re-run the analysis of Question 8 again. Summarize the results and comment on the differences.
