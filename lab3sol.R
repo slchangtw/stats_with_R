@@ -57,9 +57,9 @@ rr.cc.home<-cc.home.t[1,2] * (cc.home.t[1,1]+cc.home.t[2,1]) /
 rr.cc.home
 
 ## ------------------------------------------------------------------------
-chisq.test(cc.home.t)$statistic
-chisq.test(cc.home.t)$expected
-cc.home.t-chisq.test(cc.home.t)$expected
+    chisq.test(cc.home.t)$statistic
+    chisq.test(cc.home.t)$expected
+    cc.home.t-chisq.test(cc.home.t)$expected
 
 ## ------------------------------------------------------------------------
 cc.home.f <- xtabs(~ HomeOwner + CreditCard, data = creditcard, 

@@ -10,23 +10,64 @@ knitr::opts_chunk$set(echo = TRUE, comment = "", fig.align = 'center', fig.heigh
 
 ```{r}
 load("data/creditcard.Rdata")
+#attach(creditcard)
 ```
 
 ## 1. First of all, tabulate the CreditCard variable.
-
+```{r}
+table(creditcard$CreditCard)
+```
 ### (a) (half a point) How many applicants was the credit card approved?
+```{r}
+Crd_det <- table(creditcard$CreditCard)
+Crd_det
+```
+The credit card was approved for 307 applicants 
 
 ### (b) (1 point) What are the odds of getting a credit card application denied?
+```{r}
+crd_dend <- Crd_det[1]/Crd_det[2]
+crd_dend
+```
+The odds of credit card application being denied is 1.247557 : 1
 
 ### (c) (1 point) What is the "risk" (i.e. probability) of getting a credit card application approved?
+```{r}
+crd_rsk <- Crd_det[2]/sum(Crd_det)
+crd_rsk
+
+prop.table(Crd_det)[2]
+```
+The rink (probability) of getting a credit card application approved is 0.4449275
 
 ## 2. Cross-tabulate the variables Children and CreditCard.
+```{r}
+crd_chld<-table(CreditCard, Children)
+crd_chld
+```
+
 
 ### (a) (1 point) How many applicants with children in their household was the credit card denied?
+```{r}
+crd_chld[1,2]
+
+```
+Credit card was deined fOr 170 of applicants who had children.
+Of the applicants who had children, 170 applications were denied credit card.
 
 ### (b) (1 point) How many applicants without children in their household got the credit card application approved?
 
+```{r}
+crd_chld[2,1]
+```
+for 161 applicants without children in their household go their credit card aplication approved
+
 ### (c) (half a point) Draw a mosaicplot visualising the contingency table of credit card approval and whether children live in the applicant’s household.
+
+```{r}
+mosaicplot(crd_chld,  main="Credit card approval by having a child")
+
+```
 
 ## 3. You continue with your analysis of the relationship between Children and CreditCard.
 
