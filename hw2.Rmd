@@ -191,6 +191,7 @@ cor(companies$pricechange, companies$dividend, use = "complete.obs", method = "s
 ## 11. You continue investigating the relationship between price change over the last 12 months and dividend. From the revious question you conclude that there are five outliers: two companies with high dividend, three with high price change.
 
 ### (a) (half a point) Eliminate these five outliers and draw the plot anew. Has the relationship changed?
+The relationship has changed, as the outliers have been removed.
 
 ```{r}
 d <- companies[!(companies$dividend > 15 | companies$pricechange > 140), ]
@@ -200,13 +201,26 @@ ggplot(data = d) +
 ```
 
 ### (b) (1 point) Give the company names for those that you eliminated from your analysis?
+The five commpanies that we eleminated are as below 
+"IDB Holdings", "Brait SA. (JSE)", "Combined Motor", "Peregrine" and "PSG Group"
 
 ```{r}
 companies[(companies$dividend > 15 & !is.na(companies$dividend) | companies$pricechange > 140 ), "name"]
 ```
 
 ### (c) (1 point) Calculate the Pearson correlation coefficient for the restricted set. By how much has the correlation coefficient changed.
+The co relation co efficient for the restricted set has changed by 0.2010288.
+
+with the complete set:
+cor(companies$pricechange, companies$dividend, use = "complete.obs", method = "pearson")
+[1] -0.130151
+
+with the restricted set:
+d <- companies[!(companies$dividend > 15 | companies$pricechange > 140), ]
+cor(d$pricechange, d$dividend, use = "complete.obs", method = "pearson")
+[1] -0.3311798
+
 
 ```{r}
 cor(d$pricechange, d$dividend, use = "complete.obs")
-```
+
