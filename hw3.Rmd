@@ -9,27 +9,45 @@ knitr::opts_chunk$set(echo = TRUE, comment = "", fig.align = 'center', fig.heigh
 ```
 
 ```{r}
+library(knitr)
+library(vcd)
+library(DescTools)
+library(psych)
+```
+
+```{r}
 load("data/creditcard.Rdata")
-#attach(creditcard)
 ```
 
 ## 1. First of all, tabulate the CreditCard variable.
+
 ```{r}
 table(creditcard$CreditCard)
 ```
+
 ### (a) (half a point) How many applicants was the credit card approved?
+
 ```{r}
 Crd_det <- table(creditcard$CreditCard)
 Crd_det
 ```
 The credit card was approved for 307 applicants 
 
-### (b) (1 point) What are the odds of getting a credit card application denied?
 ```{r}
-crd_dend <- Crd_det[1]/Crd_det[2]
+table(creditcard$CreditCard)
+```
+
+### (b) (1 point) What are the odds of getting a credit card application denied?
+
+```{r}
+crd_dend <- Crd_det[1] / Crd_det[2]
 crd_dend
 ```
 The odds of credit card application being denied is 1.247557 : 1
+
+```{r}
+383 / 307
+```
 
 ### (c) (1 point) What is the "risk" (i.e. probability) of getting a credit card application approved?
 ```{r}
@@ -38,11 +56,16 @@ crd_rsk
 
 prop.table(Crd_det)[2]
 ```
-The rink (probability) of getting a credit card application approved is 0.4449275
+
+The risk (probability) of getting a credit card application approved is 0.4449275
+
+```{r}
+307 / (383 + 307)
+```
 
 ## 2. Cross-tabulate the variables Children and CreditCard.
 ```{r}
-crd_chld<-table(CreditCard, Children)
+crd_chld <- table(CreditCard, Children)
 crd_chld
 ```
 
@@ -52,57 +75,161 @@ crd_chld
 crd_chld[1,2]
 
 ```
-Credit card was deined fOr 170 of applicants who had children.
+
+Credit card was deined for 170 of applicants who had children.
 Of the applicants who had children, 170 applications were denied credit card.
+
+```{r}
+table(creditcard$Children, creditcard$CreditCard)
+```
 
 ### (b) (1 point) How many applicants without children in their household got the credit card application approved?
 
+For 161 applicants without children in their household go their credit card aplication approved.
+
 ```{r}
-crd_chld[2,1]
+xtabs(~ creditcard$Children + creditcard$CreditCard)
 ```
-for 161 applicants without children in their household go their credit card aplication approved
 
 ### (c) (half a point) Draw a mosaicplot visualising the contingency table of credit card approval and whether children live in the applicant’s household.
 
 ```{r}
-mosaicplot(crd_chld,  main="Credit card approval by having a child")
-
+mosaicplot(CreditCard ~ Children, data = creditcard, color = 2:3)
 ```
 
 ## 3. You continue with your analysis of the relationship between Children and CreditCard.
 
 ### (a) (1 point) Are applicants with children in their household less likely (as measured in odds) to get credit card applications approved than others? Calculate the odds ratio for getting a credit card application approved comparing applicants with children in their household with those without.
 
+```{r}
+(146 / 170) / (161 / 213)
+
+# or 
+oddsratio(xtabs(~ creditcard$Children + creditcard$CreditCard), log = FALSE)
+```
+
 ### (b) (1 point) Are applicants with children less likely (as measured in risk) to get credit card applications denied than applicants without children? Calculate the relative risk for getting a credit card application denied comparing applicants with children in their household to those without.
 
+```{r}
+(213 / (213 + 161)) / (170 / (170 + 146))
+```
+
 ### (c) (half a point) Looking at the mosiac plot created in Question 2c, how strong is the relationship between the two variables Children and CreditCard.
+
+```{r}
+
+```
 
 ## 4. Now, you assess the relationship between Children and CreditCard using the $\chi^2$-statistic.
 
 ### (a) (1 point) Calculate the $\chi^2$-statistic to assess the relationship between Children and CreditCard.
 
+```{r}
+chisq.test(creditcard$Children, creditcard$CreditCard)
+```
+
 ### (b) (1.5 points) Calculate the expected frequencies under the assumption that home ownership has no effect on credit card approval. For which cells are expected frequencies higher than the observed ones?
 
+```{r}
+chisq.test(creditcard$Children, creditcard$CreditCard)$expected
+```
+
+
+```{r}
+chisq.test(creditcard$Children, creditcard$CreditCard)$expected 
+```
 ## 5. In the following, perform the analyses separately for female and male applicants.
+
+```{r}
+creditcard_f <- creditcard[creditcard$Gender == 0, ]
+creditcard_m <- creditcard[creditcard$Gender == 1, ]
+```
 
 ### (a) (half a point) Calculate the $\chi^2$-statistic to assess the relationship between Children and CreditCard.
 
-### (b) (1.5 point) Calculate the expected frequencies under the assumption that home own- ership has no effect on credit card approval. For which cells are expected frequencies higher than the observed ones?
+```{r}
+chisq.test(creditcard_f$Children, creditcard_f$CreditCard)
+```
+
+
+```{r}
+chisq.test(creditcard_m$Children, creditcard_m$CreditCard)
+```
+
+### (b) (1.5 point) Calculate the expected frequencies under the assumption that Children has no effect on credit card approval. For which cells are expected frequencies higher than the observed ones?
+
+```{r}
+chisq.test(creditcard_f$Children, creditcard_f$CreditCard)$expected
+```
+
+```{r}
+chisq.test(creditcard_m$Children, creditcard_m$CreditCard)$expected
+```
 
 ### (c) (half a point) Do the results differ for the two sexes?
 
 ## 6. (2.5 points) Visualise the relationships using mosaicplots. Do the differences between females and males in relation to credit card approval and children in the household become visible in the plots? Provide reason for your answer!
 
+```{r}
+mosaicplot(CreditCard ~ Children + Gender, data = creditcard, color = 2:5)
+```
+
 ## 7. (2.5points) Compute the odds ratios to assess the relationship between Children and CreditCard for males and females separately. Are the results more in line with the $\chi^2$-statistic or more in line with the mosaicplot?
+
+```{r}
+oddsratio(xtabs(~ creditcard_f$Children + creditcard_f$CreditCard), log = FALSE)
+```
+
+```{r}
+oddsratio(xtabs(~ creditcard_m$Children + creditcard_m$CreditCard), log = FALSE)
+```
 
 ## 8. Now, you assess the relationships between SavingsType and CreditCard.
 
 ### (a) (half a point) Calculate the $\chi^2$-statistic to assess the relationship between SavingsType and CreditCard.
 
+```{r}
+chisq.test(creditcard$SavingsType, creditcard$CreditCard)
+```
+
 ### (b) (1 point) Calculate the Phi-coefficient, the Contingency Coefficient and Cramer’s V to assess the relationship between SavingsType and CreditCard.
+
+```{r}
+
+# phi(table(creditcard$SavingsType, creditcard$CreditCard)) # cannot be calculated, since the size of contigency table is not 2 x 2 
+
+relation <- list("Contingency Coefficient" = 
+ContCoef(x = creditcard$SavingsType, y = creditcard$CreditCard),
+"Cramer's V" = CramerV(x = creditcard$SavingsType, y = creditcard$CreditCard))
+
+relation
+```
 
 ### (c) (half a point) Why is there no result for the Phi-Coefficient?
 
 ### (d) (half a point) Visualize the relationship between credit card approval and savings type. Which of the statistics used for this data comes closer to the visual representation of the relationship’s strength?
 
+```{r}
+mosaicplot(CreditCard ~ SavingsType, data = creditcard, color = 2:3)
+```
 ## 9. (2.5 points) Since there are too few cases for savings type 3 (CDs), you exclude applicants having this savings type and re-run the analysis of Question 8 again. Summarize the results and comment on the differences.
+
+```{r}
+# remove savings type 3
+creditcard_remove_3 <- creditcard[!creditcard$SavingsType == 3, ]
+```
+
+```{r}
+chisq.test(creditcard_remove_3$SavingsType, creditcard_remove_3$CreditCard)
+```
+```{r}
+relation <- list("Phi-coefficient" = phi(table(creditcard_remove_3$SavingsType, creditcard_remove_3$CreditCard)),
+                 "Contingency Coefficient" = 
+ContCoef(x = creditcard_remove_3$SavingsType, y = creditcard_remove_3$CreditCard),
+"Cramer's V" = CramerV(x = creditcard_remove_3$SavingsType, y = creditcard_remove_3$CreditCard))
+
+relation
+```
+```{r}
+mosaicplot(CreditCard ~ SavingsType, data = creditcard_remove_3, color = 2:3)
+```
