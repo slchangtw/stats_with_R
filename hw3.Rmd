@@ -161,7 +161,7 @@ chisq.test(creditcard$SavingsType, creditcard$CreditCard)
 
 ```{r}
 
-# phi(table(creditcard$SavingsType, creditcard$CreditCard)) # cannot be calculated, since the size of contigency table is not 2 x 2 
+# phi(table(creditcard$SavingsType, creditcard$CreditCard)) # cannot be calculated, since the size of the contigency table is not 2 x 2 
 
 relation <- list("Contingency Coefficient" = 
 ContCoef(x = creditcard$SavingsType, y = creditcard$CreditCard),
