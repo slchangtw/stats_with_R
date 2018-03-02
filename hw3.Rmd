@@ -26,11 +26,14 @@ load("data/creditcard.Rdata")
 ```{r}
 table(creditcard$CreditCard)
 ```
+The credit card was approved for 307 applicants.
+
 ### (b) (1 point) What are the odds of getting a credit card application denied?
 
 ```{r}
 383 / 307
 ```
+The odds of getting a credit card application denied is 1.247557
 
 ### (c) (1 point) What is the "risk" (i.e. probability) of getting a credit card application approved?
 
@@ -38,11 +41,13 @@ table(creditcard$CreditCard)
 307 / (383 + 307)
 ```
 
+The risk of getting a credit card approved is 0.4449275.
+
 ## 2. Cross-tabulate the variables Children and CreditCard.
 
 ### (a) (1 point) How many applicants with children in their household was the credit card denied?
 
-170
+The credit card denied for 170 applicants with children in their household.
 
 ```{r}
 table(creditcard$Children, creditcard$CreditCard)
@@ -50,11 +55,12 @@ table(creditcard$Children, creditcard$CreditCard)
 
 ### (b) (1 point) How many applicants without children in their household got the credit card application approved?
 
-161
 
 ```{r}
 xtabs(~ creditcard$Children + creditcard$CreditCard)
 ```
+
+The credit card application approved for 161 applicants without children in their household. 
 
 ### (c) (half a point) Draw a mosaicplot visualising the contingency table of credit card approval and whether children live in the applicant’s household.
 
@@ -73,38 +79,50 @@ mosaicplot(CreditCard ~ Children, data = creditcard, color = 2:3)
 oddsratio(xtabs(~ creditcard$Children + creditcard$CreditCard), log = FALSE)
 ```
 
+The odds of getting a credit card application approved comparing applicants with children in their household with those without is 1.136208.
+
 ### (b) (1 point) Are applicants with children less likely (as measured in risk) to get credit card applications denied than applicants without children? Calculate the relative risk for getting a credit card application denied comparing applicants with children in their household to those without.
 
 ```{r}
 (213 / (213 + 161)) / (170 / (170 + 146))
 ```
 
+The risk for getting a credit card application denied comparing applicants with children in their household to those without is 1.058635.
+
 ### (c) (half a point) Looking at the mosiac plot created in Question 2c, how strong is the relationship between the two variables Children and CreditCard.
 
-```{r}
-
-```
+Based on the mosaicpot the created in question 2c, the relationship between the two variables Children and CreditCard is not that strong.
 
 ## 4. Now, you assess the relationship between Children and CreditCard using the $\chi^2$-statistic.
 
 ### (a) (1 point) Calculate the $\chi^2$-statistic to assess the relationship between Children and CreditCard.
 
 ```{r}
-chisq.test(creditcard$Children, creditcard$CreditCard)
+chisq.test(creditcard$Children,creditcard$CreditCard)$statistic
 ```
+The $\chi^2$-statistic is 0.56827, which indicates weak relationship between children and credit card approval. 
 
-### (b) (1.5 points) Calculate the expected frequencies under the assumption that home ownership has no effect on credit card approval. For which cells are expected frequencies higher than the observed ones?
+### (b) (1.5 points) Calculate the expected frequencies under the assumption that Children has no effect on credit card approval. For which cells are expected frequencies higher than the observed ones?
 
 ```{r}
+# observation
+xtabs(~ creditcard$Children + creditcard$CreditCard)
+```
+
+```{r}
+# expectation
 chisq.test(creditcard$Children, creditcard$CreditCard)$expected
 ```
 
+For cell representing, expected frequencies are higher than the observed ones for people who got credit card approved without children and for people who did not get credit card approved with children.
 
 ```{r}
 chisq.test(creditcard$Children, creditcard$CreditCard)$expected > xtabs(~ creditcard$Children + creditcard$CreditCard)
 ```
+
 ## 5. In the following, perform the analyses separately for female and male applicants.
 
+The dataset is partitioned into *creditcard_f* and *creditcard_m* by gender.
 ```{r}
 creditcard_f <- creditcard[creditcard$Gender == 0, ]
 creditcard_m <- creditcard[creditcard$Gender == 1, ]
@@ -113,31 +131,55 @@ creditcard_m <- creditcard[creditcard$Gender == 1, ]
 ### (a) (half a point) Calculate the $\chi^2$-statistic to assess the relationship between Children and CreditCard.
 
 ```{r}
-chisq.test(creditcard_f$Children, creditcard_f$CreditCard)
+chisq.test(creditcard_f$Children, creditcard_f$CreditCard)$statistic
 ```
 
+Chi-squared statistic for the relationship between males with Children and CreditCard is 1.0837.
 
 ```{r}
-chisq.test(creditcard_m$Children, creditcard_m$CreditCard)
+chisq.test(creditcard_m$Children, creditcard_m$CreditCard)$statistic
 ```
+Chi-squared statistic for the relationship between females with Children and CreditCard is 3.033659.
 
 ### (b) (1.5 point) Calculate the expected frequencies under the assumption that Children has no effect on credit card approval. For which cells are expected frequencies higher than the observed ones?
 
 ```{r}
 chisq.test(creditcard_f$Children, creditcard_f$CreditCard)$expected
 ```
+```{r}
+chisq.test(creditcard_f$Children, creditcard_f$CreditCard)$expected > xtabs(~creditcard_f$Children + creditcard_f$CreditCard)
+```
+```{r}
+xtabs(~creditcard_f$Children + creditcard_f$CreditCard)
+```
+
+The expected frequencies under the assumption that females with Children have no effect on credit card approval is shown in the first table.
+For cells representing females with no children, credit card denied and credit card approved and children have frequencies higher than the observed ones
 
 ```{r}
 chisq.test(creditcard_m$Children, creditcard_m$CreditCard)$expected
 ```
+```{r}
+chisq.test(creditcard_m$Children, creditcard_m$CreditCard)$expected > xtabs(~ creditcard_m$Children + creditcard_m$CreditCard)
+```
+```{r}
+xtabs(~ creditcard_m$Children + creditcard_m$CreditCard)
+```
+
+The expected frequencies under the assumption that males with Children have no effect on credit card approval is shown in the first table. 
+
+For cells representing male with children, credit card approved and credit card denied and with children have frequencies higher than the observed ones.
 
 ### (c) (half a point) Do the results differ for the two sexes?
+Yes, the results differ for the two sexes as shown in the above tables.
 
 ## 6. (2.5 points) Visualise the relationships using mosaicplots. Do the differences between females and males in relation to credit card approval and children in the household become visible in the plots? Provide reason for your answer!
 
 ```{r}
-mosaicplot(CreditCard ~ Children + Gender, data = creditcard, color = 2:5)
+mosaicplot(CreditCard ~ Children + Gender, data = creditcard, color = 2:3)
 ```
+
+Yes, the differences between females and males in relation to credit card approval and children becomes visible in the plots. We see that for male applicants who have children are less likely to be denied credit card than females do.
 
 ## 7. (2.5points) Compute the odds ratios to assess the relationship between Children and CreditCard for males and females separately. Are the results more in line with the $\chi^2$-statistic or more in line with the mosaicplot?
 
@@ -148,20 +190,21 @@ oddsratio(xtabs(~ creditcard_f$Children + creditcard_f$CreditCard), log = FALSE)
 ```{r}
 oddsratio(xtabs(~ creditcard_m$Children + creditcard_m$CreditCard), log = FALSE)
 ```
+The results are more in line with mosaicplot, as the odd for male with children are more likely to get their credit card approved.
 
 ## 8. Now, you assess the relationships between SavingsType and CreditCard.
 
 ### (a) (half a point) Calculate the $\chi^2$-statistic to assess the relationship between SavingsType and CreditCard.
 
 ```{r}
-chisq.test(creditcard$SavingsType, creditcard$CreditCard)
+chisq.test(creditcard$SavingsType, creditcard$CreditCard)$statistic
 ```
+The chi squared  statistic for relationship between SavingsType and Creditcard is 9.19157.
 
 ### (b) (1 point) Calculate the Phi-coefficient, the Contingency Coefficient and Cramer’s V to assess the relationship between SavingsType and CreditCard.
 
 ```{r}
-
-# phi(table(creditcard$SavingsType, creditcard$CreditCard)) # cannot be calculated, since the size of the contigency table is not 2 x 2 
+# phi(table(creditcard$SavingsType, creditcard$CreditCard)) # cannot be calculated, since the size of the contigency table is not 2 x 2
 
 relation <- list("Contingency Coefficient" = 
 ContCoef(x = creditcard$SavingsType, y = creditcard$CreditCard),
@@ -170,13 +213,23 @@ ContCoef(x = creditcard$SavingsType, y = creditcard$CreditCard),
 relation
 ```
 
+The calculated values are as below:
+
+- Contingency Coefficient: 0.114656,
+- Cramer’s V : 0.1154171.
+
 ### (c) (half a point) Why is there no result for the Phi-Coefficient?
+
+Since the size of the contigency table is not 2 x 2, there is no result for Phi-coefficient.
 
 ### (d) (half a point) Visualize the relationship between credit card approval and savings type. Which of the statistics used for this data comes closer to the visual representation of the relationship’s strength?
 
 ```{r}
 mosaicplot(CreditCard ~ SavingsType, data = creditcard, color = 2:3)
 ```
+
+Spearmen corelation comes close to he visual representation of the relationship's strength, since it measures the relationship between two discrete variables.
+
 ## 9. (2.5 points) Since there are too few cases for savings type 3 (CDs), you exclude applicants having this savings type and re-run the analysis of Question 8 again. Summarize the results and comment on the differences.
 
 ```{r}
@@ -198,3 +251,15 @@ relation
 ```{r}
 mosaicplot(CreditCard ~ SavingsType, data = creditcard_remove_3, color = 2:3)
 ```
+
+After removing savings type 3, the following values are obtained: 
+- Chi-squared statistic is 7.3615,
+- Phi-coefficient is 0.11,
+- Contingency Coefficient is 0.1085816,
+- Cramer's V is 0.1092274.
+
+We see that the chi-squared value has reduced from 9.19 to 7.36
+Contigency coefficient has not changed from 0.114656 to 0.1085816 and Cramer's V has changed from 0.1154171 to 0.1092274.
+
+The decrease could indicates that saving type and credit card approval are more likely to be independent after type 3 is removed.
+
