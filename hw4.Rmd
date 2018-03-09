@@ -220,11 +220,10 @@ ggplot(creditcard) +
 ggplot(creditcard) +
     geom_boxplot(aes(x = Gender, y = Income))
 ```
-As observed from the above representation we see that there are about 6 outliers for male home owners while there arent any outliers for female homeowners. Also there are a lot spread of income is more even in females when compared to males. 
-
-
+As observed from the above representation we see that there are about 6 outliers for male home owners while there arent any outliers for female homeowners. Also the spread of income is more even in females when compared to males. Observation for males are larger in number than for females.The distribution is positive skewed. Interquartile range is smaller in males as shown in the box plot but the standard deviation is larger in males due to outliers.
+  
 ## 8. Again using the subset data for homeowners, you want to see whether the difference in means is large in comparison to the spread of the data.
-
+ 
 ### (a) (1 points) Calculate the means ($\bar{x}_{inc.f}$, $\bar{x}_{inc.m}$) and the standard deviations ($s_{inc.f}$, $s_{inc.m}$) of income separately. Now calculate the test-statistic of the independent-samples t-test.
 
 ```{r}
@@ -232,8 +231,12 @@ inc_x_bar <- tapply(creditcard$Income, creditcard$Gender,
                    mean, na.rm = TRUE)
 inc_sd <- tapply(creditcard$Income, creditcard$Gender,
                    sd, na.rm = TRUE)
+inc_x_bar
+inc_sd
 ```
-
+The means of income for female $\bar{x}_{inc.f}$ is 5.913714 and means of income for male $\bar{x}_{inc.m}$ is 5.683105
+the standard deviation for female income is ${s}_{inc.f}$ is 5.101051 and standard deviation for male income is ${s}_{inc.m}$ is 5.819205.
+ 
 ```{r}
 n1 <- nrow(creditcard[creditcard$Gender == 0 & !is.na(creditcard$Income), ])
 
@@ -246,18 +249,21 @@ t_value <- (inc_x_bar[1] - inc_x_bar[2]) /
 t_value <- unname(t_value)
 t_value
 ```
-
+test-statistic of the independent-samples t-test is 0.340173.
+ 
 ### (b) (1 point) Using a t-distribution with n1 + n2 - 2 degrees of freedom, calculate the probability of a t-distributed random variable being larger than or equal the above calculated t-statistic score.
 ```{r}
 p_larger <- pt(abs(t_value), df = n1 + n2 - 2, lower.tail = FALSE)
 p_larger
 ```
+the probability of a t-distributed random variable being larger than or equal the above calculated t-statistic score of 0.340173 using a t-distribution with n1 + n2 - 2 degrees of freedom is 0.366985.
 
 ### (c) (half a point) Based on the results so far, compute the probability under the null hypothesis to obtain a result for the test statistic that is as extreme as the one we have obtained.
 
 ```{r}
 2 * pt(abs(t_value), df = n1 + n2 - 2, lower.tail = FALSE)
 ```
+probability under the null hypothesis to obtain a result for the test statistic that is as extreme as the one we have obtained is 0.73397.
 
 ## 9. (2.5 points) Use the function t-test to check with an independent samples t-test whether income significantly differs between males and females in your subset of homeowners. Assume equal variances for the two groups. State the statistical null hypothesis to be tested as well as the alternative hypothesis.
 Take a look at the output and compare it with your results above.
@@ -268,6 +274,10 @@ m_income <- creditcard[creditcard$Gender == 1 & !is.na(creditcard$Income), 'Inco
 
 t.test(f_income, m_income, mu = 0, var.equal = TRUE)
 ```
+The null hypothesis to be tested is if the difference between mean of income between male and female is equal to 0
+Alternatiev hypothesis is the difference in mean is not equal to 0
+Since the P value is greater than the 0.05 we cannot reject the null hypothesis in favour of the alternative hypothesis
+we also see that the t-statistics value is similar to what we had calculated individually.
 
 ## 10. (2.5 points) Visualise the previous results. Draw a plot for the pdf of the t-distribution with the adequate number of degrees of freedom for the test statistic t. Color the areas under the pdf for all values smaller than t and larger than t.
 
