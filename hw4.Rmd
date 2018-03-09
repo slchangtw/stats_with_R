@@ -308,7 +308,7 @@ m_income <- creditcard[creditcard$Gender == 1 & !is.na(creditcard$Income), 'Inco
 t.test(f_income, m_income, mu = 0, var.equal = TRUE)
 ```
 
-The null hypothesis to be tested is if the difference between mean of income between male and female is equal to 0. Alternatiev hypothesis is the difference in mean is not equal to 0. Since the P value is greater than the 0.05 we cannot reject the null hypothesis in favour of the alternative hypothesis. We also see that the t-statistics value is similar to what we had calculated individually.
+The null hypothesis to be tested is if the difference between mean of income between male and female is equal to 0. Alternative hypothesis is the difference in mean is not equal to 0. Since the p-value is greater than the 0.05 we cannot reject the null hypothesis in favour of the alternative hypothesis. We also see that the t-statistics value is similar to what we had calculated individually.
 
 ## 10. (2.5 points) Visualise the previous results. Draw a plot for the pdf of the t-distribution with the adequate number of degrees of freedom for the test statistic t. Color the areas under the pdf for all values smaller than t and larger than t.
 
