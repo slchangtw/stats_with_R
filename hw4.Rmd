@@ -224,6 +224,7 @@ t_value
 ```
 
 ### (b) (1 point) Using a t-distribution with n1 + n2 - 2 degrees of freedom, calculate the probability of a t-distributed random variable being larger than or equal the above calculated t-statistic score.
+
 ```{r}
 p_larger <- pt(abs(t_value), df = n1 + n2 - 2, lower.tail = FALSE)
 p_larger
