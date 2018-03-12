@@ -51,7 +51,8 @@ ggplot(wage_stats, aes(x = health, y = mean_wage, group = 1)) +
 
 ## 3. (2.5 points) Using an appropriate statistical procedure, test whether average wage is the same for workers with health level "1. at most Good" and workers with health level "2. at least Very Good". Formulate the null and alternative hypothesis and report the results in an English sentence refering to the relevant numbers.
 
-$H_0 : Average\ wage_{level_1} = Average\ wage_{level_2}$ 
+$H_0 : Average\ wage_{level_1} = Average\ wage_{level_2}$
+
 $H_1 : Average\ wage_{level_1} \neq Average\ wage_{level_2}$ 
 
 ```{r}
