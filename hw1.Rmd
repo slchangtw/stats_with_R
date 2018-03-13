@@ -169,7 +169,7 @@ IQR(Forbes2016$Sales, na.rm = TRUE)
 
 ```{r, fig.height=5}
 sub_forbes2016 <- subset(Forbes2016,
-                         Country %in% c("Brazil", "India", "South Korea", "Franc", 
+                         Country %in% c("Brazil", "India", "South Korea", "France", 
                                         "Germany", "Mexico"))
 
 boxplot(Profits ~ as.character(Country), data = sub_forbes2016, horizontal = TRUE, 
