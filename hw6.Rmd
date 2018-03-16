@@ -8,7 +8,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE, comment = "", fig.align = 'center', fig.height = 3, fig.width = 6, message = FALSE, warning = FALSE)
 ```
 
-## 1. (2.5 points) Investigate whether there are any differences between countries in company mar- ket to book value (variable mtb). Draw a boxplot by group to visualise the distributions of company market to book value by country. Comment on the plot.
+## 1. (2.5 points) Investigate whether there are any differences between countries in company market to book value (variable mtb). Draw a boxplot by group to visualise the distributions of company market to book value by country. Comment on the plot.
 
 ## 2. You now investigate the means and medians of the market to book value in more detail.
 
