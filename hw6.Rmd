@@ -1,0 +1,47 @@
+---
+title: "Homework 6"
+author: "Shun-Lung Chang, Dilip Hiremath"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = "", fig.align = 'center', fig.height = 3, fig.width = 6, message = FALSE, warning = FALSE)
+```
+
+## 1. (2.5 points) Investigate whether there are any differences between countries in company mar- ket to book value (variable mtb). Draw a boxplot by group to visualise the distributions of company market to book value by country. Comment on the plot.
+
+## 2. You now investigate the means and medians of the market to book value in more detail.
+
+### (a) (1 point) Compute for each country the means and medians of companies’ market to book value.
+
+### (b) (1.5 points) Compute the ratio between mean market to book value and median market to book value for each country. Which country has the largest ratio, which one the smallest?
+
+## 3. Next, you turn to the variance of the market to book value.
+
+### (a) (1.5 points) Compute the variance of market to book value for each country. How different are the variances of market to value between the countries?
+
+### (b) (1 point) Compute the ratio between the largest and the lowest variance.
+
+## 4. (2.5 points) Compute an ANOVA test and check whether the mean market to book value of companies is the same for all countries! Provide an answer in plain English, reporting all the relevant statistical numbers.
+
+## 5. (2.5 points) Use Tukey’s HSD post-hoc test to find out which countries actually differ in mean companies’ market to book value.
+
+## 6. (2.5 points) According to the significant differences between the countries mean companies’ market to book value, how many clusters do the countries form? Which country belongs to which cluster?
+
+## 7. (2.5 points) Due to the skewness of the data and given the small sample sizes, your supervisor insists that you double check your results with a non-parametric alternative to the ANOVA test. Hence, you apply the Kruskal-Wallis test to your data. Perform the analysis and report your results.
+
+## 8. (2.5 points) As post hoc test you now use the pairwise Wilcoxon rank sum test with Bonferroni correction. Which countries differ in mean companies market to book value?
+
+## 9. (2.5 points) According to the significant differences between the countries mean companies’ market to book value in the pairwise Wilcoxon test, how many clusters do the countries form? Which country belongs to which cluster?
+
+## 10. Now, you look at companies’ dividends for two sectors, namely automobiles and chemicals.
+
+### (a) (1.5 points) Compare the mean dividend for companies in these two sectors using the appropriate t-test. Summarize your analysis.
+
+### (b) (1 point) To double-check, you also run a non-parametric alternative to the t-test.
+
+## 11. You now want to generate a bootstrap confidence interval for the difference in means in dividend between companies in the automobiles sector and companies in the chemicals sector.
+
+### (a) (1 point) In a first step you draw 10 000 samples of size 10 from the observed dividends for companies in the two sectors. Draw with replacement and use set.seed(20180323)! Report the summary statistics of your differences in the sample means in companies’ dividend between the two sectors.
+
+### (b) (1.5 points) Next, generate 10 000 samples for each sample size k, where k varies from 3 to 30 in steps of 1. Draw with replacement and use set.seed(20180323)! Plot the resulting 95% bootstrap confidence intervals for the differences in the sample means in companies’ dividend between the two sectors against the sample size k.
