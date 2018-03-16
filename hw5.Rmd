@@ -9,6 +9,7 @@ knitr::opts_chunk$set(echo = TRUE, comment = "", fig.align = 'center', fig.heigh
 ```
 
 ```{r}
+# import packages
 library(magrittr)
 library(dplyr)
 library(ggplot2)
@@ -32,12 +33,16 @@ wage_stats <- Wage %>%
 wage_stats
 ```
 
+There are 858 observation for good health or below workers and their average wage is 101.6613 with the standard deviation of 35.18500. There are 2142 observation for very good health or above workers and their average wage is 115.7262 with the standard deviation of 43.43896.
+
 ### (b) (1 point) Compute the standard errors for the mean wages in the two groups.
 
 ```{r}
 wage_stats$se_wage <- wage_stats$sd_wage / sqrt(wage_stats$counts)
 wage_stats
 ```
+
+The standard errors for the mean wage for workers with good is 1.2011960 and workers with very good health is 0.9385766.
 
 ## 2. (2.5 points) Create a plot showing the mean wages for the two groups and corresponding error bars, i.e. add lines of length one standard error of the mean to both sides of the mean.
 
@@ -48,6 +53,8 @@ ggplot(wage_stats, aes(x = health, y = mean_wage, group = 1)) +
     geom_point() +
     labs(x = 'Health' , y = 'Wage')
 ```
+
+The plot is shown above.
 
 ## 3. (2.5 points) Using an appropriate statistical procedure, test whether average wage is the same for workers with health level "1. at most Good" and workers with health level "2. at least Very Good". Formulate the null and alternative hypothesis and report the results in an English sentence refering to the relevant numbers.
 
@@ -60,6 +67,11 @@ $H_1 : Average\ wage_{level_1} \neq Average\ wage_{level_2}$
 t.test(Wage$wage ~ Wage$health, var.equal = FALSE)
 ```
 
+The null hypothesis is that the average wage for level 1 at most Good is equal to average income of workers with health level 2 at least Very Good.
+The alternative hypothesis states that the average wage for level 1 at most Good is not the same as average income of workers with health level 2 at least Very Good.
+Based on the test results, we can reject the null hypothesis in favour of the alternative hypothesis. 
+The difference in mean wages between level 1 at most Good (101.6613) and average income of workers with health level 2 (115.7262) is significant in a two-sided, Welch t-test (t = -9.2265,  df = 1934.3, p-value < 2.2e-16).
+
 ## 4. Plot a box plot of the workers raw wage (variable wage using the education level (variable education) as grouping.
 
 ```{r}
@@ -69,23 +81,37 @@ ggplot(Wage) +
 
 ### (a) (half a point) Are half of the wages for workers who have less than a high school degree below the first quartile of the wage for workers with some college degree?
 
+No.
+
 ### (b) (half a point) Do half of the workers with a HS degree have higher wages than three quarters of the high school dropouts?
+
+No.
 
 ### (c) (half a point) The minimum wage of workers with advanced degree is larger than the median wage of high school dropouts?
 
+No. The minimum wage of workers with advanced degree is `r min(Wage[Wage$education == "5. Advanced Degree", "wage"])`, while the median wage of high school dropouts is `r median(Wage[Wage$education == "1. < HS Grad", "wage"])`.
+
 ### (d) (half a point) The interquartile range differs substantially between all groups.
 
+No, at least the interquartiles in levels 1, 2 and 3 are quite the same. And the interquartiles in level 4 and 5 are slightly wider.
+
 ### (e) (half a point) Spread as measured by the length of the whiskers differs substantially between all groups.
+
+No, the length of the whiskers are similar.
 
 ## 5. You want to assess the wage difference between educational groups. Before you run the appropriate statistical test, you check some of the assumptions for ANOVA. In particular, you assess homoscedasticity.
 
 ### (a) (1.5 points) Looking at the boxplot in Question 4. Does homoscedasticity hold for the five groups? Give reasons for your answer!
+
+No, by looking at group 1 and 2, we can see that the data points in group 1 lie closer to the box, but there exist a number of outliers in group 2. Thus we cannot safely conclude that the homoscedasticity holds.
 
 ### (b) (1 point) Select a suitable variance test to check on this. Does the test confirm homoscedasticity?
 
 ```{r}
 leveneTest(Wage$wage, Wage$education)
 ```
+
+No, this result does not confirm homoscedasticity, which is in line with the observation from the box plot. We observe that the p-value is very small and hence we can reject the null hypothesis in favour of the alternative.
 
 ## 6. Now, you assess the wage difference between educational groups using a statistical test.
 
@@ -95,6 +121,9 @@ leveneTest(Wage$wage, Wage$education)
 wage_education <- aov(wage ~ education, data = Wage)
 anova(wage_education)
 ```
+
+There is a highly significant difference in wages across educational groups as given by the ANOVA test with a test-statistic of F = 229.81 with 4 numerator
+and 2995 denominator degrees of freedom yielding a p-value of p < 2.2e-16.
 
 ### (b) (1 point) From the ANOVA table derive the total sum of squares for wages and compare this result with the variance of wage when multiplied by 2999.
 
@@ -106,21 +135,55 @@ sum(anova(wage_education)[, 2])
 var(Wage$wage) * 2999
 ```
 
+They are equal as shown in the above calculations.
+
 ### (c) (half a point) Which proportion of total variation in wages is due to the group differences in education?
 
 ```{r}
 anova(wage_education)[1, 2] / sum(anova(wage_education)[, 2])
 ```
 
+0.2348419 is the proportion of total variation in wages due to the group differences in education.
+
 ## 7. Having found an overall difference, you now want to use a post-hoc test with Holm correction, to asses which marital status groups do actually differ significantly in wages?
 
 ```{r}
 pairwise.t.test(Wage$wage, Wage$education, p.adjust.method = "holm")
 ```
+```{r}
+pairwise.t.test(Wage$wage, Wage$maritl, p.adjust.method = "holm")
+```
 
 ### (a) (2 points) According to the post hoc test which groups differ significantly?
+For education groups, since all p-values are far less than 0.001, we can say that the wages differ significantly across all groups.
+
+For Martial groups:
+
+- never married - married
+
+- never married - divorced
+
+- married - divorced
+
+- married - separated
 
 ###(b) (half a point) According to the post hoc test which groups do not differ significantly?
+
+As mentioned in (a), there is no group differing significantly.
+
+For Martial groups:
+
+- never married - widowed
+
+- never married - separated
+
+- married - widowed
+
+- widowed - divorced
+
+- widowed - separated
+
+- divorced - separated
 
 ## 8. You now investigate the relationship between wage and the two predictors education and health status.
 
@@ -131,6 +194,12 @@ wage_edu_heal <- aov(wage ~ education + health, data = Wage)
 anova(wage_edu_heal)
 ```
 
+There is a highly significant difference in wages across education groups as given by the ANOVA test with a test-statistic of F = 231.248 with 4 numerator
+and 2995 denominator degrees of freedom yielding a p-value of < 2.2e-16.
+
+There is also a significant difference in wages across health groups as given by the ANOVA test with a test-statistic of F = 19.791 with 1 numerator
+and 2995 denominator degrees of freedom yielding a p-value of 8.956e-06.
+
 ### (b) (1 point) Second, calculate a model with interaction. Give a verbal summary of the model result!
 
 ```{r}
@@ -138,8 +207,12 @@ wage_edu_heal_inter <- aov(wage ~ education + health + education:health, data = 
 anova(wage_edu_heal_inter)
 ```
 
+The difference in wages caused by the interaction effect of health and educational groups is not significant as given by the ANOVA test with a test-statistic of F = 1.2316 with 4 numerator and 2995 denominator degrees of freedom yielding a p-value of 0.2952.
+
 ### (c) (half a point) Using the TukeyHSD post-hoc tests, which education levels do actually differ significantly in wages?
 
 ```{r}
 TukeyHSD(wage_edu_heal)
 ```
+
+As the results indicate, all pair of educations differ significantly in wages given the small p-values.
