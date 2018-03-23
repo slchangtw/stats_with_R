@@ -25,6 +25,8 @@ ggplot(companies) +
     geom_boxplot(aes(x = country, y = mtb))
 ```
 
+South Africa and IR comparitively have higher company market to book value. However they are just margianlly larger. IR has the 3 outliers, of which one is quite distinctively away positively. The spread of Germany and South Africa are almost similar.
+
 ## 2. You now investigate the means and medians of the market to book value in more detail.
 
 ### (a) (1 point) Compute for each country the means and medians of companies’ market to book value.
@@ -37,12 +39,16 @@ m_mtb <- companies %>%
 m_mtb
 ```
 
+The table above shows the means and medians of companies’ market to book value in different coutries.
+
 ### (b) (1.5 points) Compute the ratio between mean market to book value and median market to book value for each country. Which country has the largest ratio, which one the smallest?
 
 ```{r}
 m_mtb$ratio <- m_mtb$mean_mtb / m_mtb$median_mtb
 m_mtb
 ```
+
+Germany has the largest ratio, Israel has the smallest one.
 
 ## 3. Next, you turn to the variance of the market to book value.
 
@@ -55,11 +61,15 @@ v_mtb <- companies %>%
 v_mtb
 ```
 
+Ireland has the highest variance of 4.207778. All the other countries have relative similarly variances.
+
 ### (b) (1 point) Compute the ratio between the largest and the lowest variance.
 
 ```{r}
 max(v_mtb$var_mtb) / min(v_mtb$var_mtb)
 ```
+
+The ratio between the largest and the lowest variance is 2.035037.
 
 ## 4. (2.5 points) Compute an ANOVA test and check whether the mean market to book value of companies is the same for all countries! Provide an answer in plain English, reporting all the relevant statistical numbers.
 
@@ -67,12 +77,15 @@ max(v_mtb$var_mtb) / min(v_mtb$var_mtb)
 mtb_aov <- aov(mtb ~ country, data = companies)
 anova(mtb_aov)
 ```
+THe p-value is significantly small and hence the null hypothesis can be rejected in favour of the alternate hypothesis that the the mtb varies are not all the same across country. 
 
 ## 5. (2.5 points) Use Tukey’s HSD post-hoc test to find out which countries actually differ in mean companies’ market to book value.
 
 ```{r}
 TukeyHSD(mtb_aov)
 ```
+
+From the TurkeyHSD post hoc test we see that countries pair Israel-BD, Israel-France and Israel-IR differ given the small p-values.
 
 ## 6. (2.5 points) According to the significant differences between the countries mean companies’ market to book value, how many clusters do the countries form? Which country belongs to which cluster?
 
