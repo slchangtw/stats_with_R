@@ -1,0 +1,195 @@
+---
+title: "Homework 6"
+author: "Shun-Lung Chang, Dilip Hiremath"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = "", fig.align = 'center', fig.height = 3, fig.width = 6, message = FALSE, warning = FALSE)
+```
+
+```{r}
+library(ggplot2)
+library(dplyr)
+```
+
+```{r}
+# load data
+companies <- read.delim("data/Companies.txt")
+```
+
+## 1. (2.5 points) Investigate whether there are any differences between countries in company market to book value (variable mtb). Draw a boxplot by group to visualise the distributions of company market to book value by country. Comment on the plot.
+
+```{r}
+ggplot(companies) +
+    geom_boxplot(aes(x = country, y = mtb))
+```
+South Africa and IR comparitively have higher company market to book value. However they are just margianlly larger. IR has the 3 outliers, of which one is quite distinctively away positively. The spread of Germany and South Africa are almost similar. Israel has the spread.
+
+## 2. You now investigate the means and medians of the market to book value in more detail.
+
+### (a) (1 point) Compute for each country the means and medians of companies’ market to book value.
+
+```{r}
+m_mtb <- companies %>% 
+    group_by(country) %>% 
+    summarise(mean_mtb = mean(mtb, na.rm = TRUE),
+              median_mtb = median(mtb, na.rm = TRUE))
+m_mtb
+```
+
+### (b) (1.5 points) Compute the ratio between mean market to book value and median market to book value for each country. Which country has the largest ratio, which one the smallest?
+
+```{r}
+m_mtb$ratio <- m_mtb$mean_mtb / m_mtb$median_mtb
+m_mtb
+```
+Germany has the largest ratio, Israel the smallest.
+
+## 3. Next, you turn to the variance of the market to book value.
+
+### (a) (1.5 points) Compute the variance of market to book value for each country. How different are the variances of market to value between the countries?
+
+```{r}
+v_mtb <- companies %>% 
+    group_by(country) %>% 
+    summarise(var_mtb = mean(mtb, na.rm = TRUE))
+v_mtb
+```
+Israel has the highest variance of 4.207778. All the other countries have relative similarly variances.
+
+### (b) (1 point) Compute the ratio between the largest and the lowest variance.
+
+```{r}
+max(v_mtb$var_mtb) / min(v_mtb$var_mtb)
+```
+The ratio between the largest and the lowest variance is 2.035037
+
+## 4. (2.5 points) Compute an ANOVA test and check whether the mean market to book value of companies is the same for all countries! Provide an answer in plain English, reporting all the relevant statistical numbers.
+
+```{r}
+mtb_aov <- aov(mtb ~ country, data = companies)
+anova(mtb_aov)
+```
+THe P value for is significant and hence the null hypothesis can be rejected in favour of the alternate hypothesis that the the meb varies based on the country. 
+
+## 5. (2.5 points) Use Tukey’s HSD post-hoc test to find out which countries actually differ in mean companies’ market to book value.
+
+```{r}
+TukeyHSD(mtb_aov)
+```
+From the TurkeyHSD post hoc test we see that countries pair Israel-BD, Israel-France and Israel-IR differ given the small P values.
+
+## 6. (2.5 points) According to the significant differences between the countries mean companies’ market to book value, how many clusters do the countries form? Which country belongs to which cluster?
+
+According the table in task 5, Ireland differs relatively significantly from the other coutries, while the differences among the other four countries are not statistically significant. Thus, we have two clusters:
+
+- (France, Germany, Isreal, South Africa)
+- (Ireland)
+
+## 7. (2.5 points) Due to the skewness of the data and given the small sample sizes, your supervisor insists that you double check your results with a non-parametric alternative to the ANOVA test. Hence, you apply the Kruskal-Wallis test to your data. Perform the analysis and report your results.
+
+```{r}
+mtb_kw <- kruskal.test(mtb ~ country, data = companies)
+mtb_kw
+```
+
+The relatively low p-value in the test results indicates we could conclude that the averages of market to book value are different across countries.
+
+## 8. (2.5 points) As post hoc test you now use the pairwise Wilcoxon rank sum test with Bonferroni correction. Which countries differ in mean companies market to book value?
+
+```{r}
+pairwise.wilcox.test(companies$mtb, companies$country, p.adjust.method = "bonf")
+```
+
+As the result indicate, Ireland differs significantly in mean companies market to book value.
+
+## 9. (2.5 points) According to the significant differences between the countries mean companies’ market to book value in the pairwise Wilcoxon test, how many clusters do the countries form? Which country belongs to which cluster?
+
+According the p-values in task 8, we can form two clusters:
+
+- (France, Germany, Isreal)
+- (Ireland, South Africa)
+
+But, there also exist no significant difference between France and South Africa. Therefore, we would say these two clusters are not far away from each other in mean companies’ market to book value.
+
+## 10. Now, you look at companies’ dividends for two sectors, namely automobiles and chemicals.
+
+```{r}
+sub_comp <- companies %>% 
+    filter(sector %in% c('AUTOMOBILES', 'CHEMICALS'))
+```
+
+### (a) (1.5 points) Compare the mean dividend for companies in these two sectors using the appropriate t-test. Summarize your analysis.
+
+```{r}
+var.test(dividend ~ sector, data = sub_comp)
+```
+```{r}
+t.test(dividend ~ sector, data = sub_comp, var.equal = TRUE)
+```
+
+We first investigate the variances of the two sectors, and the high p-value shows that the variances of the two sectors are not significantly different. Given the same variances, we conduct a t-test to assess whether the mean dividend differs in two sectors. The high p-value suggests that the mean dividend does not differ significantly in two sectors.
+
+### (b) (1 point) To double-check, you also run a non-parametric alternative to the t-test.
+
+```{r}
+wilcox.test(dividend ~ sector, exact = FALSE, data = sub_comp)
+```
+
+The high p-value in the Wilcoxon signed-rank test indicates that the mean dividend does not differ significantly in two sectors.
+
+## 11. You now want to generate a bootstrap confidence interval for the difference in means in dividend between companies in the automobiles sector and companies in the chemicals sector.
+
+### (a) (1 point) In a first step you draw 10000 samples of size 10 from the observed dividends for companies in the two sectors. Draw with replacement and use set.seed(20180323)! Report the summary statistics of your differences in the sample means in companies’ dividend between the two sectors.
+
+```{r}
+set.seed(20180323)
+sample_mean_auto <- sapply(1:10000, 
+                           FUN = function(x) {
+                               mean(sample(sub_comp[sub_comp$sector == 'AUTOMOBILES', 
+                                                    'dividend'], 10, replace = TRUE))})
+
+sample_mean_chem <- sapply(1:10000, 
+                           FUN = function(x) {
+                               mean(sample(sub_comp[sub_comp$sector == 'CHEMICALS', 
+                                                    'dividend'], 10, replace = TRUE))})
+```
+```{r}
+summary(sample_mean_auto)
+```
+```{r}
+summary(sample_mean_chem)
+```
+
+Statistics in automibile sector are all greater that that in chemical sector expect the maximal value.
+
+### (b) (1.5 points) Next, generate 10000 samples for each sample size k, where k varies from 3 to 30 in steps of 1. Draw with replacement and use set.seed(20180323)! Plot the resulting 95% bootstrap confidence intervals for the differences in the sample means in companies’ dividend between the two sectors against the sample size k.
+
+The following two plots show the bootstrap confidence intervals with different sample sizes in two sectors.
+
+```{r, fig.height=4}
+set.seed(20180323)
+plot(c(0, 30), c(0, 5.5), type = "n", xlab = "Sample size", ylab = "Confidence interval", 
+     main = "CI for mean dividend with Automobile")
+for (k in 3:30) {
+    sample_mean <- sapply(1:10000, 
+                           FUN = function(x) {
+                               mean(sample(sub_comp[sub_comp$sector == 'AUTOMOBILES', 
+                    'dividend'], k, replace = TRUE))})
+    points(c(k, k), quantile(sample_mean, c(0.025, 0.975)), type = "b")
+}
+```
+
+```{r, fig.height=4}
+set.seed(20180323)
+plot(c(0, 30), c(0, 5.5), type = "n", xlab = "Sample size", ylab = "Confidence interval", 
+     main = "CI for mean dividend with Chemical")
+for (k in 3:30) {
+    sample_mean <- sapply(1:10000, 
+                           FUN = function(x) {
+                               mean(sample(sub_comp[sub_comp$sector == 'CHEMICALS', 
+                    'dividend'], k, replace = TRUE))})
+    points(c(k, k), quantile(sample_mean, c(0.025, 0.975)), type = "b")
+}
+```
