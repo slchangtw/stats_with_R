@@ -152,51 +152,29 @@ The high p-value in the Wilcoxon signed-rank test indicates that the mean divide
 
 ```{r}
 set.seed(20180323)
-sample_mean_auto <- sapply(1:10000, 
-                           FUN = function(x) {
-                               mean(sample(sub_comp[sub_comp$sector == 'AUTOMOBILES', 
-                                                    'dividend'], 10, replace = TRUE))})
+mean_diff <- sapply(1:10000, FUN = function(x) { 
+    mean(sample(sub_comp[sub_comp$sector == 'AUTOMOBILES', 'dividend'], 10, replace = TRUE)) - 
+    mean(sample(sub_comp[sub_comp$sector == 'CHEMICALS', 'dividend'], 10, replace = TRUE))})
 
-sample_mean_chem <- sapply(1:10000, 
-                           FUN = function(x) {
-                               mean(sample(sub_comp[sub_comp$sector == 'CHEMICALS', 
-                                                    'dividend'], 10, replace = TRUE))})
-```
-```{r}
-summary(sample_mean_auto)
-```
-```{r}
-summary(sample_mean_chem)
+summary(mean_diff)
 ```
 
-Statistics in automibile sector are all greater that that in chemical sector expect the maximal value.
+The mean difference of dividend in this sample is around 0.1056. In addition, the interval between 1st quantile and 3rd quantile (as well as that between min. and max.) covers 0, a result that is consistent with the confidence interval we obtained in task 10-a.
 
 ### (b) (1.5 points) Next, generate 10000 samples for each sample size k, where k varies from 3 to 30 in steps of 1. Draw with replacement and use set.seed(20180323)! Plot the resulting 95% bootstrap confidence intervals for the differences in the sample means in companies’ dividend between the two sectors against the sample size k.
 
-The following two plots show the bootstrap confidence intervals with different sample sizes in two sectors.
+The following plot shows the bootstrap confidence intervals with different sample sizes. As the sample size increases, the interval shrinks. 
 
 ```{r, fig.height=4}
 set.seed(20180323)
-plot(c(0, 30), c(0, 5.5), type = "n", xlab = "Sample size", ylab = "Confidence interval", 
-     main = "CI for mean dividend with Automobile")
+plot(c(0, 35), c(-3, 3), type = "n", xlab = "Sample size", ylab = "Confidence interval", 
+     main = "CI for Difference of Mean Dividend")
 for (k in 3:30) {
-    sample_mean <- sapply(1:10000, 
-                           FUN = function(x) {
-                               mean(sample(sub_comp[sub_comp$sector == 'AUTOMOBILES', 
-                    'dividend'], k, replace = TRUE))})
-    points(c(k, k), quantile(sample_mean, c(0.025, 0.975)), type = "b")
-}
-```
-
-```{r, fig.height=4}
-set.seed(20180323)
-plot(c(0, 30), c(0, 5.5), type = "n", xlab = "Sample size", ylab = "Confidence interval", 
-     main = "CI for mean dividend with Chemical")
-for (k in 3:30) {
-    sample_mean <- sapply(1:10000, 
-                           FUN = function(x) {
-                               mean(sample(sub_comp[sub_comp$sector == 'CHEMICALS', 
-                    'dividend'], k, replace = TRUE))})
-    points(c(k, k), quantile(sample_mean, c(0.025, 0.975)), type = "b")
+    mean_diff <- sapply(1:10000, 
+                        FUN = function(x) { 
+mean(sample(sub_comp[sub_comp$sector == 'AUTOMOBILES', 'dividend'], k, replace = TRUE)) - 
+mean(sample(sub_comp[sub_comp$sector == 'CHEMICALS', 'dividend'], 10, replace = TRUE))})
+    
+    points(c(k, k), quantile(mean_diff, c(0.025, 0.975)), type = "b")
 }
 ```
