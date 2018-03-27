@@ -1,0 +1,50 @@
+---
+title: "Homework 7"
+author: "Shun-Lung Chang, Dilip Hiremath"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = "", fig.align = 'center', fig.height = 3, fig.width = 6, message = FALSE, warning = FALSE)
+```
+
+```{r}
+load('data/animals.RData')
+```
+
+## 1. In a first step you graphically check the linearity of the relationship and look for potential transformations to improve linearity.
+
+### (a) Assess whether there is a linear relationship between brain weight and body weight by looking at a scatterplot of brain weight versus body weight. [Hint: The scatterplot command in Rcmdr provides a ready-made function for adding the regression line and marginal boxplots.]
+
+### (b) Now, plot the variables on a logarithmic scale (use the logarithm to base 10 here). Draw three scatterplots: one for either of the two scales transformed and one with both scales transformed. Which scatterplot shows the clearest linear relationship?
+
+### (c) Perform logarithmic transformations (using the natural logarithm with base e) for body weight and brain weight and draw three scatterplots: one for either of the two variables in the original form and the other transformed, and one for both variables transformed. Which scatterplot shows the clearest linear relationship? How do the plots here differ form the ones obtained in Question 1b?
+
+## 2. In a second step, you explore correlation and linear regression models on this data set and perform some model checks as well.
+
+### (a) "Homoscedasticity": Graphically inspect whether the variability in scores for logarithmic brain weight is roughly the same at all values of logarithmic body weight.
+
+### (b) "Normality": Graphically inspect whether the logarithmically transformed scores for body weight and brain weight are normally distributed. Use the commands qqnorm or qqline for that.
+
+## 3. In the next step, you explore correlation and linear regression models on this data set.
+
+### (a) Calculate the Pearson correlation coefficient to determine whether logarithmic body weight is related to the logarithmic brain weight. Interpret!
+
+### (b) Compute a linear regression model for logarithmic body weight depending on the loga- rithmic brain weight.
+
+## 4. Compute a linear regression model for logarithmic brain weight depending on the logarithmic body weight. How do you interpret the output in terms of the original variables, body and brain weight?
+
+## 5. Calculate the standard deviations of logarithmic body and logarithmic brain weights. Then check that the regression slopes obtained in the two models above satisfy the equation
+$bx,y = r\frac{sy}{sx}$
+
+$by,x = r\frac{sx}{sy}$
+
+## 6. In the scatter plot using logarithmically transformed brain and body weight, you can see three observations on the very right of the plot representing animals having rather large values for body weight and respectively small values for brain weight. Which animals are these? Compute a linear regression model that leaves out these points. Did the quality of the model as measured by adjusted R-squared improve? Why?
+
+## 7. Does the regression model in Question 6 prove that a higher body weight causes a higher brain weight?
+
+## 8. Now you are using the model obtained in Question 6 to predict brain weight for some animals.
+
+### (a) Which brain weight would you predict for a Southern long-nosed armadillo with a body weight of 3.6 kg, and which for a female blue whale with a body weight of 150 tons?
+
+### (b) Which one of the two predictions you just made do you find more reliable? Why?
